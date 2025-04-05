@@ -1,3 +1,4 @@
+import ContextProviders from "@/context";
 import type { Metadata } from "next";
 import "./globals.css";
 
@@ -13,7 +14,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`antialiased`}>{children}</body>
+      <ContextProviders>
+        <body className={`antialiased`}>{children}</body>
+      </ContextProviders>
     </html>
   );
 }

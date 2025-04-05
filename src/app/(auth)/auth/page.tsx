@@ -1,18 +1,98 @@
-"use client";
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @next/next/no-img-element */
+"use client";
 
 import Input from "@/components/input";
-import { useCallback, useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
+import axios, { AxiosError } from "axios";
+import { signIn } from "next-auth/react";
+import { useSearchParams } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+
+const formschema = z.object({
+  name: z
+    .string()
+    .min(3, "Username must be at least 3 characters")
+    .max(20, "Username must be at most 20 characters")
+    .regex(
+      /^[a-zA-Z0-9_]+$/,
+      "Username can only contain letters, numbers, and underscores"
+    )
+    .optional(),
+  email: z.string().email("Invalid email address"),
+  password: z
+    .string()
+    .min(8, "Password must be at least 8 characters")
+    .max(60, "Password must be at most 60 characters")
+    .regex(/[a-z]/, "Password must contain at least one lowercase letter")
+    .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
+    .regex(/[0-9]/, "Password must contain at least one number")
+    .regex(
+      /[^a-zA-Z0-9]/,
+      "Password must contain at least one special character"
+    ),
+});
 
 export default function AuthPage() {
-  const [email, setEmail] = useState<string>("");
-  const [username, setUsername] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
+  const searchParams = useSearchParams();
+
+  const { mutate: signUp, isPending } = useMutation({
+    mutationFn: async (payload: z.infer<typeof formschema>) => {
+      const { data } = await axios.post("/api/register", payload);
+      return data;
+    },
+    onError: (err: AxiosError) => {
+      if (err.status === 422) {
+        const response = err.response?.data as any;
+        for (const key in response.error) {
+          form.setError(key as any, {
+            message: response.error[key],
+          });
+        }
+        return;
+      }
+
+      throw err;
+    },
+
+    onSuccess: () => {
+      signIn("credentials", {
+        ...form.getValues(),
+        redirectTo: "/",
+      });
+      form.reset();
+    },
+  });
+
+  const form = useForm<z.infer<typeof formschema>>({
+    resolver: zodResolver(formschema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
 
   const [variant, setVariant] = useState<"login" | "register">("login");
   const toogleVariant = useCallback(() => {
     setVariant((prev) => (prev === "login" ? "register" : "login"));
-  }, []);
+    form.reset();
+  }, [form]);
+
+  useEffect(() => {
+    if (
+      searchParams.get("error") === "CredentialsSignin" &&
+      searchParams.get("code") === "credentials"
+    ) {
+      form.setError("email", {
+        message: "Invalid email and password",
+      });
+    }
+  }, [searchParams, form]);
+
+  const { errors } = form.formState;
 
   return (
     <div className="min-h-screen relative size-full bg-[url('/hero.jpg')] bg-no-repeat bg-center bg-fixed bg-cover">
@@ -21,36 +101,56 @@ export default function AuthPage() {
       <nav className="relative px-12 py-5">
         <img src={"/logo.png"} alt="Logo Image" className="h-12" />
       </nav>
+
+      {/* Form Box */}
       <div className="relative flex justify-center">
         <div className="bg-black bg-opacity-70 px-16 py-16 self-center mt-2 lg:w-2/5 lg:max-w-md rounded-md w-full">
+          {/* Form Header */}
           <h2 className="text-white text-4xl mb-8 font-semibold">
             {variant === "login" ? "Sign in" : "Register"}
           </h2>
-          <div className="flex flex-col gap-4">
+
+          {/* Form Content */}
+          <form
+            className="flex flex-col gap-4"
+            onSubmit={form.handleSubmit((payload) => {
+              if (variant === "register") {
+                signUp(payload);
+              } else {
+                signIn("credentials", {
+                  ...payload,
+                  redirectTo: "/",
+                });
+              }
+            })}
+          >
             {variant === "register" && (
-              <Input
-                id="name"
-                label="Username"
-                onChange={(e) => setUsername(e.target.value)}
-                type="text"
-                value={username}
-              />
+              <>
+                <Input id="name" label="Username" {...form.register("name")} />
+                <p className="text-xs text-red-500 relative -top-2 pl-1">
+                  {errors.name?.message}
+                </p>
+              </>
             )}
-            <Input
-              id="email"
-              label="Email"
-              onChange={(e) => setEmail(e.target.value)}
-              type="email"
-              value={email}
-            />
+            <Input id="email" label="Email" {...form.register("email")} />
+            <p className="text-xs text-red-500 relative -top-2 pl-1">
+              {errors.email?.message}
+            </p>
+
             <Input
               id="password"
               label="Password"
-              onChange={(e) => setPassword(e.target.value)}
-              type="password"
-              value={password}
+              {...form.register("password")}
             />
-            <button className="bg-red-600 py-3 text-white rounded-md w-full mt-10 hover:bg-red-700 transition">
+            <p className="text-xs text-red-500 relative -top-2 pl-1">
+              {errors.password?.message}
+            </p>
+
+            <button
+              disabled={isPending}
+              type="submit"
+              className="bg-red-600 py-3 text-white rounded-md w-full mt-10 hover:bg-red-700 transition"
+            >
               {variant === "login" ? "Login" : "Sign up"}
             </button>
             <p className="text-neutral-500 mt-12">
@@ -64,7 +164,7 @@ export default function AuthPage() {
                 {variant === "login" ? "Create an account" : "Login"}
               </span>
             </p>
-          </div>
+          </form>
         </div>
       </div>
     </div>
