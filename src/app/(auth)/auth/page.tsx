@@ -10,6 +10,9 @@ import { signIn } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { FaGithub } from "react-icons/fa";
+import { FcGoogle } from "react-icons/fc";
+
 import { z } from "zod";
 
 const formschema = z.object({
@@ -149,11 +152,37 @@ export default function AuthPage() {
             <button
               disabled={isPending}
               type="submit"
-              className="bg-red-600 py-3 text-white rounded-md w-full mt-10 hover:bg-red-700 transition"
+              className="bg-red-600 py-3 text-white rounded-md w-full hover:bg-red-700 transition"
             >
               {variant === "login" ? "Login" : "Sign up"}
             </button>
-            <p className="text-neutral-500 mt-12">
+
+            {/* Social  */}
+            <div className="flex flex-row items-center gap-4 mt-4 justify-center">
+              <div
+                onClick={() =>
+                  signIn("google", {
+                    redirectTo: "/",
+                  })
+                }
+                className="w-10 h-10 bg-white rounded-full flex items-center justify-center cursor-pointer hover:opacity-80 transition-all"
+              >
+                <FcGoogle size={30} />
+              </div>
+              <div
+                onClick={() =>
+                  signIn("github", {
+                    redirectTo: "/",
+                  })
+                }
+                className="w-10 h-10 bg-white rounded-full flex items-center justify-center cursor-pointer hover:opacity-80 transition-all"
+              >
+                <FaGithub size={30} />
+              </div>
+            </div>
+
+            {/* Link Toogle */}
+            <p className="text-neutral-500 mt-6">
               {variant === "login"
                 ? "First time using Netflix? "
                 : "Already have an account? "}
