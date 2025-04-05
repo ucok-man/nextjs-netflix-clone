@@ -3,7 +3,7 @@ import { auth } from "@/auth";
 export default auth((req) => {
   const loginpage = new URL("/auth", req.nextUrl.origin);
 
-  if (!req.auth && req.nextUrl.pathname !== loginpage.pathname) {
+  if (!req.auth && !req.nextUrl.pathname.startsWith("/auth")) {
     return Response.redirect(loginpage);
   }
 });

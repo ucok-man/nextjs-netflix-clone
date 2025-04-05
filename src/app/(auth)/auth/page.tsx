@@ -61,10 +61,10 @@ export default function AuthPage() {
       throw err;
     },
 
-    onSuccess: () => {
-      signIn("credentials", {
+    onSuccess: async () => {
+      await signIn("credentials", {
         ...form.getValues(),
-        redirectTo: "/",
+        redirectTo: "/profiles",
       });
       form.reset();
     },
@@ -122,7 +122,7 @@ export default function AuthPage() {
               } else {
                 signIn("credentials", {
                   ...payload,
-                  redirectTo: "/",
+                  redirectTo: "/profiles",
                 });
               }
             })}
@@ -162,7 +162,7 @@ export default function AuthPage() {
               <div
                 onClick={() =>
                   signIn("google", {
-                    redirectTo: "/",
+                    redirectTo: "/profiles",
                   })
                 }
                 className="w-10 h-10 bg-white rounded-full flex items-center justify-center cursor-pointer hover:opacity-80 transition-all"
@@ -172,7 +172,7 @@ export default function AuthPage() {
               <div
                 onClick={() =>
                   signIn("github", {
-                    redirectTo: "/",
+                    redirectTo: "/profiles",
                   })
                 }
                 className="w-10 h-10 bg-white rounded-full flex items-center justify-center cursor-pointer hover:opacity-80 transition-all"
