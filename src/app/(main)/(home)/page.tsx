@@ -1,10 +1,10 @@
 "use client";
-import { signOut } from "next-auth/react";
+import Navbar from "@/components/navbar";
 
 export default function HomePage() {
   return (
-    <div onClick={() => signOut()} className="text-white cursor-pointer">
-      Logout
+    <div>
+      <Navbar />
     </div>
   );
 }
