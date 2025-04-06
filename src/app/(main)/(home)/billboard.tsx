@@ -1,6 +1,6 @@
 "use client";
 
-import { GetBillboardResponse } from "@/types/get-billboard-response";
+import { Movie } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
@@ -11,7 +11,7 @@ export default function BillBoard() {
     queryKey: ["billboard"],
     queryFn: async () => {
       const { data } = await axios.get("/api/random");
-      return data as GetBillboardResponse;
+      return data as Movie;
     },
   });
 

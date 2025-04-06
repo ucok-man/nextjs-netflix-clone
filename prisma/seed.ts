@@ -3,6 +3,7 @@ const prisma = new PrismaClient();
 async function main() {
   //   SEED MOVIE
 
+  await prisma.movie.deleteMany();
   await prisma.movie.createMany({
     data: [
       {
@@ -22,7 +23,8 @@ async function main() {
           "A lonely young woman, Sintel, helps and befriends a dragon, whom she calls Scales. But when he is kidnapped by an adult dragon, Sintel decides to embark on a dangerous quest to find her lost friend Scales.",
         videoUrl:
           "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
-        thumbnailUrl: "http://uhdtv.io/wp-content/uploads/2020/10/Sintel-3.jpg",
+        thumbnailUrl:
+          "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Sintel-screenshot-3.jpg/800px-Sintel-screenshot-3.jpg?20101102105514",
         genre: "Adventure",
         duration: "15 minutes",
       },

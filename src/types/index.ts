@@ -1,4 +1,4 @@
-export type GetBillboardResponse = {
+export type Movie = {
   id: string;
   title: string;
   description: string;
@@ -10,3 +10,5 @@ export type GetBillboardResponse = {
   updatedAt: string;
   favoriteByUserIds: string[];
 };
+
+export type Movies = Movie[];
