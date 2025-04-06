@@ -26,7 +26,8 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "src/middleware.tss"
+    "src/middleware.tss",
+    "src/next-auth.d.ts"
   ],
   "exclude": ["node_modules"]
 }

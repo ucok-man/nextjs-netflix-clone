@@ -5,15 +5,16 @@ import { Movies } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
-export default function Trending() {
+export default function MyList() {
   const { data: movies, isPending } = useQuery({
-    queryKey: ["trending"],
+    queryKey: ["mylist"],
     queryFn: async () => {
-      const { data } = await axios.get("/api/movies");
+      const { data } = await axios.get("/api/favourites");
       return data as Movies;
     },
   });
+
   if (isPending) return null;
 
-  return <MovieList title="Trending Now" movies={movies || []} />;
+  return <MovieList title="My List" movies={movies || []} />;
 }

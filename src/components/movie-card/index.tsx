@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { Movie } from "@/types";
 import { BsFillPlayFill } from "react-icons/bs";
+import FavouriteButton from "../favourite-button";
 
 type Props = {
   movie: Movie;
@@ -28,6 +29,7 @@ export default function MovieCard({ movie }: Props) {
             >
               <BsFillPlayFill size={30} className="relative left-[0.5px]" />
             </div>
+            <FavouriteButton movieId={movie.id} />
           </div>
 
           <p className="text-green-400 font-semibold mt-4">

@@ -8,7 +8,8 @@ type Props = {
   children: ReactNode;
 };
 
-const queryclient = new QueryClient();
+export const queryclient = new QueryClient();
+
 export default function ContextProviders({ children }: Props) {
   return (
     <SessionProvider>

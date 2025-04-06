@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { compare } from "bcryptjs";
 import NextAuth from "next-auth";
@@ -63,8 +64,29 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
   callbacks: {
     authorized: async ({ auth }) => {
-      // Logged in users are authenticated, otherwise redirect to login page
       return !!auth;
+    },
+
+    jwt({ token, user, session, trigger }) {
+      const u = user as Record<string, any>;
+      if (trigger === "signIn") {
+        for (const key in u) {
+          token[key] = u[key];
+        }
+      }
+      if (trigger === "update") {
+        for (const key in session.user) {
+          token[key] = session.user[key];
+        }
+      }
+      return token;
+    },
+    session({ session, token }) {
+      const u = session.user as Record<string, any>;
+      for (const key in token) {
+        u[key] = token[key];
+      }
+      return { ...session, user: u };
     },
   },
 });
