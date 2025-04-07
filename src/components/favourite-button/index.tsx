@@ -1,5 +1,3 @@
-"use client";
-
 import { queryclient } from "@/context";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
@@ -13,17 +11,16 @@ type Props = {
 
 export default function FavouriteButton({ movieId }: Props) {
   const { data: session, update: updateSession } = useSession();
-
   const isFavourites = session?.user?.favoriteMovieIds?.includes(movieId);
 
   const { mutate: toogleFavourites, isPending } = useMutation({
     mutationFn: async () => {
       if (isFavourites) {
         return await axios.delete("/api/favourites", {
-          data: { movieId },
+          data: { movieId: movieId },
         });
       }
-      return await axios.post("/api/favourites", { movieId });
+      return await axios.post("/api/favourites", { movieId: movieId });
     },
 
     onSuccess: async () => {

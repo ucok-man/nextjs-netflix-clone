@@ -16,7 +16,7 @@ export default function MovieList({ movies, title }: Props) {
         <p className="text-white mb-4 text-base md:text-xl lg:text-2xl font-semibold">
           {title}
         </p>
-        <div className="grid grid-cols-4 gap-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {movies.map((movie) => (
             <MovieCard key={movie.id} movie={movie} />
           ))}

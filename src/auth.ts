@@ -69,7 +69,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
     jwt({ token, user, session, trigger }) {
       const u = user as Record<string, any>;
-      if (trigger === "signIn") {
+      if (trigger === "signIn" || trigger === "signUp") {
         for (const key in u) {
           token[key] = u[key];
         }

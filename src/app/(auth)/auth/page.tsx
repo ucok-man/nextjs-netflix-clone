@@ -98,11 +98,11 @@ export default function AuthPage() {
   const { errors } = form.formState;
 
   return (
-    <div className="min-h-screen relative size-full bg-[url('/hero.jpg')] bg-no-repeat bg-center bg-fixed bg-cover">
+    <div className="min-h-screen relative size-full bg-[url('/images/hero.jpg')] bg-no-repeat bg-center bg-fixed bg-cover">
       <div className="bg-black size-full lg:opacity-50 absolute"></div>
 
       <nav className="relative px-12 py-5">
-        <img src={"/logo.png"} alt="Logo Image" className="h-12" />
+        <img src={"/images/logo.png"} alt="Logo Image" className="h-12" />
       </nav>
 
       {/* Form Box */}

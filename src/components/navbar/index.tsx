@@ -45,7 +45,7 @@ export default function Navbar() {
           showBackground ? "bg-zinc-900 opacity-90" : ""
         }`}
       >
-        <img className="h-5 lg:h-7" src="/logo.png" alt="Logo" />
+        <img className="h-5 lg:h-7" src="/images/logo.png" alt="Logo" />
 
         <div className="flex-row ml-8 gap-7 hidden lg:flex">
           <NavbarItem label="Home" />
@@ -55,9 +55,10 @@ export default function Navbar() {
           <NavbarItem label="My List" />
           <NavbarItem label="Browse by languages" />
         </div>
+
         <div
           onClick={toogleMobileMenu}
-          className="lg:hidden flex flex-row items-center gap-2 ml-8 cursor-pointer relative"
+          className="lg:hidden flex flex-row items-center gap-2 ml-4 max-sm:mr-2 md:ml-8 cursor-pointer relative"
         >
           <div className="text-white text-sm">Browse</div>
           <BsChevronDown
@@ -79,7 +80,7 @@ export default function Navbar() {
             className="flex flex-row items-center gap-2 cursor-pointer relative"
           >
             <div className="w-6 h-6 lg:w-10 lg:h-10 rounded-md overflow-hidden">
-              <img src="/default-blue.png" alt="Profiles" />
+              <img src="/images/default-blue.png" alt="Profiles" />
             </div>
             <BsChevronDown
               className={`text-white transition-all duration-300 ${
