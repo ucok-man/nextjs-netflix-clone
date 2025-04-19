@@ -1,9 +1,13 @@
-import { ReactNode } from "react";
+import { ReactNode, Suspense } from "react";
 
 type Props = {
   children: ReactNode;
 };
 
 export default function AuthLayout({ children }: Props) {
-  return <div>{children}</div>;
+  return (
+    <div>
+      <Suspense>{children}</Suspense>
+    </div>
+  );
 }
